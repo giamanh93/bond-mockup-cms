@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const prisma = require('../config/database')
 
-const JWT_SECRET = process.env.JWT_SECRET || 'buildstock-secret-change-in-production'
+const JWT_SECRET = process.env.JWT_SECRET || 'bond-secret-change-in-production'
 
 async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization

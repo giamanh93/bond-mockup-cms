@@ -2,17 +2,9 @@ import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
 import Login from '@/pages/Login'
+import AuthCallback from '@/pages/AuthCallback'
 import AppLayout from '@/components/AppLayout'
-import Dashboard from '@/pages/Dashboard'
-import Products from '@/pages/Products'
-import Orders from '@/pages/Orders'
-import NewOrder from '@/pages/NewOrder'
-import Customers from '@/pages/Customers'
-import Debts from '@/pages/Debts'
-import Reports from '@/pages/Reports'
-import StockEntryPage from '@/pages/StockEntry'
-import Settings from '@/pages/Settings'
-import Attendance from '@/pages/Attendance'
+import Home from '@/pages/Home'
 
 function PrivateRoute({ children }) {
   const { user, isLoading } = useAuthStore()
@@ -29,6 +21,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
       <Route
         path="/"
         element={
@@ -37,17 +30,7 @@ export default function App() {
           </PrivateRoute>
         }
       >
-        <Route index element={<Dashboard />} />
-        <Route path="products" element={<Products />} />
-        <Route path="orders" element={<Orders />} />
-        <Route path="orders/new" element={<NewOrder />} />
-        <Route path="orders/:id/edit" element={<NewOrder />} />
-        <Route path="customers" element={<Customers />} />
-        <Route path="debts" element={<Debts />} />
-        <Route path="stock/entry" element={<StockEntryPage />} />
-        <Route path="reports" element={<Reports />} />
-        <Route path="settings" element={<Settings />} />
-        <Route path="attendance" element={<Attendance />} />
+        <Route index element={<Home />} />
       </Route>
     </Routes>
   )

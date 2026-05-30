@@ -8,188 +8,20 @@ datasource db {
 }
 
 enum Role {
-  OWNER
+  ADMIN
   STAFF
-  WAREHOUSE
   VIEWER
 }
 
-enum AttendanceStatus {
-  PRESENT
-  HALF_DAY
-  LEAVE_PAID
-  LEAVE_UNPAID
-}
-
-enum OrderStatus {
-  NEW
-  PROCESSING
-  DELIVERED
-  COMPLETED
-  CANCELLED
-}
-
 model User {
-  id           Int          @id @default(autoincrement())
-  username     String       @unique
-  passwordHash String?      @map("password_hash")
-  fullName     String       @map("full_name")
+  id           Int      @id @default(autoincrement())
+  username     String   @unique
+  passwordHash String?  @map("password_hash")
+  fullName     String   @map("full_name")
   email        String?
-  role         Role         @default(STAFF)
-  dailyRate    Decimal?     @map("daily_rate") @db.Decimal(15, 0)
-  isActive     Boolean      @default(true) @map("is_active")
-  createdAt    DateTime     @default(now()) @map("created_at")
-  orders       Order[]
-  auditLogs    AuditLog[]
-  attendances  Attendance[]
+  role         Role     @default(STAFF)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
 
   @@map("users")
-}
-
-model Attendance {
-  id        Int              @id @default(autoincrement())
-  userId    Int              @map("user_id")
-  user      User             @relation(fields: [userId], references: [id])
-  date      DateTime         @db.Date
-  status    AttendanceStatus @default(PRESENT)
-  note      String?
-  createdAt DateTime         @default(now()) @map("created_at")
-
-  @@unique([userId, date])
-  @@index([date])
-  @@map("attendances")
-}
-
-model Category {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  products Product[]
-
-  @@map("categories")
-}
-
-model Product {
-  id           Int           @id @default(autoincrement())
-  code         String        @unique
-  name         String
-  categoryId   Int           @map("category_id")
-  category     Category      @relation(fields: [categoryId], references: [id])
-  unit         String
-  sellPrice    Decimal       @map("sell_price") @db.Decimal(15, 0)
-  costPrice    Decimal?      @map("cost_price") @db.Decimal(15, 0)
-  stockQty     Decimal       @default(0) @map("stock_qty") @db.Decimal(10, 3)
-  minStock     Decimal       @default(0) @map("min_stock") @db.Decimal(10, 3)
-  imageUrl     String?       @map("image_url")
-  isActive     Boolean       @default(true) @map("is_active")
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
-  orderItems   OrderItem[]
-  stockEntries StockEntry[]
-
-  @@index([categoryId], name: "idx_products_category")
-  @@map("products")
-}
-
-model Customer {
-  id          Int       @id @default(autoincrement())
-  name        String
-  phone       String?
-  address     String?
-  openingDebt Decimal   @default(0) @map("opening_debt") @db.Decimal(15, 0)
-  totalDebt   Decimal   @default(0) @map("total_debt") @db.Decimal(15, 0)
-  createdAt   DateTime  @default(now()) @map("created_at")
-  orders      Order[]
-  payments    Payment[]
-
-  @@map("customers")
-}
-
-model Order {
-  id          Int         @id @default(autoincrement())
-  orderNo     String      @unique @map("order_no")
-  customerId  Int         @map("customer_id")
-  customer    Customer    @relation(fields: [customerId], references: [id])
-  userId      Int         @map("user_id")
-  user        User        @relation(fields: [userId], references: [id])
-  orderDate   DateTime    @default(now()) @map("order_date")
-  totalAmount Decimal     @map("total_amount") @db.Decimal(15, 0)
-  paidAmount  Decimal     @default(0) @map("paid_amount") @db.Decimal(15, 0)
-  debtAmount  Decimal     @default(0) @map("debt_amount") @db.Decimal(15, 0)
-  status      OrderStatus @default(NEW)
-  note        String?
-  pdfUrl      String?     @map("pdf_url")
-  createdAt   DateTime    @default(now()) @map("created_at")
-  items       OrderItem[]
-  payments    Payment[]
-
-  @@index([customerId], name: "idx_orders_customer")
-  @@index([orderDate], name: "idx_orders_date")
-  @@map("orders")
-}
-
-model OrderItem {
-  id        Int     @id @default(autoincrement())
-  orderId   Int     @map("order_id")
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId Int     @map("product_id")
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Decimal @db.Decimal(10, 3)
-  unitPrice Decimal @map("unit_price") @db.Decimal(15, 0)
-  discount  Decimal @default(0) @db.Decimal(5, 2)
-  subtotal  Decimal @db.Decimal(15, 0)
-
-  @@map("order_items")
-}
-
-model Payment {
-  id            Int      @id @default(autoincrement())
-  customerId    Int      @map("customer_id")
-  customer      Customer @relation(fields: [customerId], references: [id])
-  orderId       Int?     @map("order_id")
-  order         Order?   @relation(fields: [orderId], references: [id])
-  amount        Decimal  @db.Decimal(15, 0)
-  paymentDate   DateTime @default(now()) @map("payment_date")
-  paymentMethod String   @default("cash") @map("payment_method")
-  note          String?
-
-  @@index([customerId], name: "idx_payments_customer")
-  @@map("payments")
-}
-
-model StockEntry {
-  id           Int      @id @default(autoincrement())
-  productId    Int      @map("product_id")
-  product      Product  @relation(fields: [productId], references: [id])
-  supplierName String?  @map("supplier_name")
-  quantity     Decimal  @db.Decimal(10, 3)
-  costPrice    Decimal  @map("cost_price") @db.Decimal(15, 0)
-  entryDate    DateTime @default(now()) @map("entry_date")
-  note         String?
-
-  @@index([productId], name: "idx_stock_entries_product")
-  @@map("stock_entries")
-}
-
-model ShopConfig {
-  id        Int     @id @default(1)
-  name      String  @default("Cửa hàng vật liệu xây dựng")
-  phone     String  @default("")
-  address   String  @default("")
-  logoUrl   String? @map("logo_url")
-
-  @@map("shop_config")
-}
-
-model AuditLog {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  user      User     @relation(fields: [userId], references: [id])
-  action    String
-  tableName String   @map("table_name")
-  recordId  Int      @map("record_id")
-  oldData   Json?    @map("old_data")
-  newData   Json?    @map("new_data")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("audit_logs")
 }

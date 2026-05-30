@@ -4,9 +4,9 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'BuildStock API',
+      title: 'Bond API',
       version: '1.0.0',
-      description: 'API quản lý vật liệu xây dựng — BuildStock',
+      description: 'API quản lý trái phiếu — Bond',
     },
     servers: [{ url: '/api', description: 'API Server' }],
     components: {
@@ -15,25 +15,10 @@ const options = {
           type: 'http',
           scheme: 'bearer',
           bearerFormat: 'JWT',
-          description: 'Token OIDC từ Zitadel',
+          description: 'JWT token (username/password login)',
         },
       },
       schemas: {
-        Product: {
-          type: 'object',
-          properties: {
-            id: { type: 'integer' },
-            code: { type: 'string', example: 'VL001' },
-            name: { type: 'string', example: 'Xi măng Hà Tiên PCB40' },
-            categoryId: { type: 'integer' },
-            unit: { type: 'string', example: 'Bao' },
-            sellPrice: { type: 'number', example: 95000 },
-            costPrice: { type: 'number', example: 82000 },
-            stockQty: { type: 'number', example: 500 },
-            minStock: { type: 'number', example: 50 },
-            isActive: { type: 'boolean' },
-          },
-        },
         SuccessResponse: {
           type: 'object',
           properties: {

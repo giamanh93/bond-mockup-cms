@@ -8,11 +8,7 @@ const minioClient = new Minio.Client({
   secretKey: process.env.MINIO_PASS,
 })
 
-const BUCKETS = {
-  ORDERS: 'buildstock-orders',
-  PRODUCTS: 'buildstock-products',
-  REPORTS: 'buildstock-reports',
-}
+const BUCKETS = {}
 
 async function ensureBuckets() {
   for (const bucket of Object.values(BUCKETS)) {

@@ -23,17 +23,9 @@ app.get('/api-docs.json', (_req, res) => res.json(swaggerSpec))
 
 // Routes
 app.use('/auth', require('./routes/auth'))
-app.use('/settings', require('./routes/settings'))
-app.use('/products', require('./routes/products'))
-app.use('/categories', require('./routes/categories'))
-app.use('/orders', require('./routes/orders'))
-app.use('/customers', require('./routes/customers'))
-app.use('/reports', require('./routes/reports'))
-app.use('/stock', require('./routes/stock'))
 app.use('/users', require('./routes/users'))
-app.use('/attendance', require('./routes/attendance'))
 
-app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }))
+app.get('/health', (_req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }))
 
 app.use(errorMiddleware)
 

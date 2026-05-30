@@ -1,33 +1,45 @@
 import { create } from 'zustand'
 import { authService } from '@/services/auth'
-import api from '@/services/api'
+
+function toProfile(oidcUser) {
+  if (!oidcUser) return null
+  const p = oidcUser.profile || {}
+  return {
+    sub: p.sub,
+    username: p.preferred_username || p.email || p.sub,
+    fullName: p.name || p.preferred_username || '',
+    email: p.email || '',
+    role: p.role || (Array.isArray(p.roles) ? p.roles[0] : null),
+  }
+}
 
 export const useAuthStore = create((set) => ({
   user: null,
+  accessToken: null,
   isLoading: true,
 
   init: async () => {
     set({ isLoading: true })
-    const token = authService.getToken()
-    if (!token) return set({ user: null, isLoading: false })
     try {
-      const { data } = await api.get('/auth/me')
-      set({ user: data.data, isLoading: false })
+      const oidcUser = await authService.getUser()
+      if (oidcUser && !oidcUser.expired) {
+        set({ user: toProfile(oidcUser), accessToken: oidcUser.access_token, isLoading: false })
+      } else {
+        set({ user: null, accessToken: null, isLoading: false })
+      }
     } catch {
-      authService.removeToken()
-      set({ user: null, isLoading: false })
+      set({ user: null, accessToken: null, isLoading: false })
     }
   },
 
-  login: async (username, password) => {
-    const { data } = await api.post('/auth/login', { username, password })
-    authService.setToken(data.data.token)
-    set({ user: data.data.user })
+  setOidcUser: (oidcUser) => {
+    set({ user: toProfile(oidcUser), accessToken: oidcUser?.access_token ?? null })
   },
 
-  logout: () => {
-    authService.removeToken()
-    set({ user: null })
-    window.location.href = '/login'
+  login: () => authService.login(),
+
+  logout: async () => {
+    set({ user: null, accessToken: null })
+    await authService.logout()
   },
 }))
