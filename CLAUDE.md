@@ -172,9 +172,11 @@ Khi cần lưu data vào SQL Server `dbKsgBond`:
 
 ### Step-by-step tạo feature "Quản lý X" (vd: coupon, issuer, transaction)
 
-**1. Hỏi user 2 câu critical** (nếu chưa rõ):
+**1. Mặc định mockup-tier — KHÔNG hỏi, KHÔNG gợi ý BE C#.**
+Chỉ hỏi 1 câu nếu chưa rõ:
 - "Màn này admin có cần tùy biến UI sau khi deploy không?" → quyết định Page/Info vs Plain JSON (xem Quy tắc 2)
-- "Đây là mockup-tier hay cần BE C# thật?" → quyết định viết ở `mock-server/` hay cả `umee-bond` (xem Quy tắc 1)
+
+> **Quy tắc cứng**: Không bao giờ chủ động đề xuất "có cần viết BE C# không?" — mặc định KHÔNG. Chỉ động `umee-bond` khi user nói rõ những cụm như "viết BE C#", "ghép vào BE thật", "thêm vào UmeApi", "viết controller", "viết BE production". Không có cụm đó → STOP ở bước mockup, không hint, không đề xuất.
 
 **2. Tạo folder contract** `contracts/features/<NN>-<feature-slug>/`:
 ```
@@ -233,7 +235,10 @@ Icon string → component map trong [AppLayout.jsx](frontend/src/components/AppL
 
 **9. Test trên mockup**: `npm run dev:mockup` → http://localhost:3000/coupon → verify list/add/edit/delete chạy đúng UX.
 
-**10. BE C# (CHỈ khi user yêu cầu)** — xem [docs/standard-api-patterns.md](docs/standard-api-patterns.md) cho naming:
+**10. BE C# — BỎ QUA hoàn toàn nếu user không yêu cầu rõ.**
+Step này chỉ tham khảo cho trường hợp user nói thẳng "viết BE C#" / "ghép vào BE thật" / tương tự. Nếu chỉ nghe "tạo page mới" → dừng sau bước 9, KHÔNG đề xuất bước này, KHÔNG hỏi user có muốn viết BE.
+
+Nếu user yêu cầu rõ — xem [docs/standard-api-patterns.md](docs/standard-api-patterns.md) cho naming:
 - Controller `UmeApi/Controllers/Version2/CouponController.cs` route `api/v2/coupon/[action]`
 - Service `UmeBLL/Services/CouponV2Service.cs` + interface
 - Repository `UmeDAL/Repositories/CouponV2Repository.cs` + interface — Dapper raw query
