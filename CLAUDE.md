@@ -161,6 +161,91 @@ Khi cần lưu data vào SQL Server `dbKsgBond`:
 - Không cần rebuild FE — F5 trang là có hiệu lực
 - Dev mode bypass file (giữ workflow `.env.development` / `.env.api` cho 2 mode)
 
+## Tạo feature mới — workflow
+
+> **Tài liệu chi tiết bắt buộc đọc trước**:
+> - [contracts/README.md](contracts/README.md) — Structure thư mục contracts + quy tắc
+> - [docs/standard-api-patterns.md](docs/standard-api-patterns.md) — Naming convention 5 nhóm API + mapping URL/SP/Repo/Service
+> - [docs/dynamic-feature-react-port.md](docs/dynamic-feature-react-port.md) — Logic 4 API cho 1 feature CRUD (Page + Filter + Info + Draft) + DynamicTable/Form contract
+> - [docs/sys-config-list-form-spec.md](docs/sys-config-list-form-spec.md) — Schema 2 bảng config DB (cho BE C# implement)
+> - [contracts/features/01-bond-list/](contracts/features/01-bond-list/) — Sample feature đầy đủ để tham khảo
+
+### Step-by-step tạo feature "Quản lý X" (vd: coupon, issuer, transaction)
+
+**1. Hỏi user 2 câu critical** (nếu chưa rõ):
+- "Màn này admin có cần tùy biến UI sau khi deploy không?" → quyết định Page/Info vs Plain JSON (xem Quy tắc 2)
+- "Đây là mockup-tier hay cần BE C# thật?" → quyết định viết ở `mock-server/` hay cả `umee-bond` (xem Quy tắc 1)
+
+**2. Tạo folder contract** `contracts/features/<NN>-<feature-slug>/`:
+```
+02-coupon-list/                 ← NN = số thứ tự, slug = kebab-case
+├── spec.md                     ← Feature spec với frontmatter (xem mẫu 01-bond-list/spec.md)
+├── page-config.json            ← Sample response GetCouponPage (gridflexs + dataList)
+├── filter-config.json          ← Sample response GetCouponFilter (group_fields filter)
+├── info-add.json               ← Sample response GetCouponInfo không Oid (form trống)
+├── info-edit.json              ← Sample response GetCouponInfo?Oid=X (form đã fill)
+└── conversation.md             ← Audit Q&A giữa AI và user (optional)
+```
+
+**3. Đăng ký endpoint vào** `contracts/api-routes.yaml`:
+```yaml
+- id: coupon.list.page
+  method: GET
+  path: /api/v2/coupon/GetCouponPage
+  response_schema: data-page.schema.json
+  mock_file: features/02-coupon-list/page-config.json
+  feature: 02-coupon-list
+  owner_mockup: ai-claude
+  owner_be: null
+  status: mockup-pending
+```
+Tương tự cho `GetCouponFilter`, `GetCouponInfo`, `SetCouponInfoDraft`, `SetCouponInfo`, `DeleteCouponInfo`.
+
+**4. mock-server**: route tự bind từ `api-routes.yaml`. Nếu endpoint cần dynamic logic (vd `SetXxxInfoDraft` recalc field) → thêm handler vào `mock-server/index.js` rồi map vào `DYNAMIC` object.
+
+**5. FE service** ở `frontend/src/services/<feature>.service.js`:
+```js
+const BASE = '/api/v2/coupon'
+export const couponService = {
+  getCouponPage: (params) => api.get(`${BASE}/GetCouponPage`, { params }).then(r => r.data),
+  getCouponFilter: () => api.get(`${BASE}/GetCouponFilter`).then(r => r.data),
+  getCouponInfo: (params) => api.get(`${BASE}/GetCouponInfo`, { params }).then(r => r.data),
+  setCouponInfoDraft: (body, { changed } = {}) => api.post(`${BASE}/SetCouponInfoDraft`, body, { params: changed ? { changed } : {} }).then(r => r.data),
+  setCouponInfo: (body) => api.post(`${BASE}/SetCouponInfo`, body).then(r => r.data),
+  deleteCouponInfo: (oid) => api.post(`${BASE}/DeleteCouponInfo`, { Oid: oid }).then(r => r.data),
+}
+```
+
+**6. FE page** ở `frontend/src/pages/<Feature>List.jsx`:
+- Copy pattern từ [BondList.jsx](frontend/src/pages/BondList.jsx) (toolbar + DynamicTable + Sheet drawer + Dialog filter + AlertDialog delete)
+- Đổi service import + entity name + action labels
+
+**7. Routing** thêm vào [App.jsx](frontend/src/App.jsx):
+```jsx
+<Route path="coupon" element={<CouponList />} />
+```
+
+**8. Menu** thêm vào [public/config/runtime.json](frontend/public/config/runtime.json):
+```json
+{ "to": "/coupon", "label": "Coupon", "icon": "FileText" }
+```
+Icon string → component map trong [AppLayout.jsx](frontend/src/components/AppLayout.jsx) `ICONS` — thêm import nếu icon mới.
+
+**9. Test trên mockup**: `npm run dev:mockup` → http://localhost:3000/coupon → verify list/add/edit/delete chạy đúng UX.
+
+**10. BE C# (CHỈ khi user yêu cầu)** — xem [docs/standard-api-patterns.md](docs/standard-api-patterns.md) cho naming:
+- Controller `UmeApi/Controllers/Version2/CouponController.cs` route `api/v2/coupon/[action]`
+- Service `UmeBLL/Services/CouponV2Service.cs` + interface
+- Repository `UmeDAL/Repositories/CouponV2Repository.cs` + interface — Dapper raw query
+- DTO `umee-model/UBond/CouponV2/CouponV2Dtos.cs` — nhớ add vào `umee-model.csproj` `<Compile Include>`
+- DI registration trong `UmeApi/Extensions/ServiceCollectionExtensions.cs`
+- Build verify: `dotnet build UmeApi/UME.Bond.API.csproj`
+- Bảng SQL: tạo `_v2` nếu chưa có (xem Quy tắc 4)
+
+### Sample workflow đã có
+
+[contracts/features/01-bond-list/](contracts/features/01-bond-list/) là sample đầy đủ. Khi tạo feature mới, **copy folder này** rồi rename + sửa entity name. 80% structure giống nhau.
+
 ## Auth chain
 
 ```
