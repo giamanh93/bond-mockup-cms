@@ -1,0 +1,15 @@
+{
+  "$comment": "Runtime config — Vite copy file này từ public/ → dist/ lúc build. Sau deploy, sửa file này (KHÔNG cần rebuild) rồi reload trang là FE pick up giá trị mới.",
+  "apiUrl": "http://localhost:4001",
+  "appName": "Bond",
+  "buildTag": "MOCKUP",
+  "oidc": {
+    "issuer": "https://idp-dev.unicloudgroup.com.vn/realms/realm_ksgfinance",
+    "clientId": "ksg-web-bond-client",
+    "scope": "openid profile"
+  },
+  "menu": [
+    { "to": "/bond", "label": "Trái phiếu", "icon": "FileText" },
+    { "to": "/ui",   "label": "UI Showcase", "icon": "Sparkles" }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "$comment": "Template tham khảo — copy sang runtime.json và sửa giá trị theo môi trường deploy.",
+  "apiUrl": "https://api.example.com",
+  "appName": "Bond",
+  "buildTag": "PROD",
+  "oidc": {
+    "issuer": "https://idp.example.com/realms/your_realm",
+    "clientId": "your-client-id",
+    "scope": "openid profile"
+  },
+  "menu": [
+    { "to": "/bond", "label": "Trái phiếu", "icon": "FileText" }
+  ]
+}

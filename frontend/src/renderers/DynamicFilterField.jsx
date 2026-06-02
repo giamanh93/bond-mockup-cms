@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
-import api from '@/services/api'
+import { cachedGet } from '@/lib/lookup-cache'
 import { normalizeOptions, resolveDependencies, setUrlQueryParam } from '@/utils/urlQuery'
 import {
   Input, Textarea,
@@ -18,12 +18,13 @@ function useOptions(field, formData) {
   const [loading, setLoading] = useState(false)
   useEffect(() => {
     if (!field?.columnObject) return
-    if (!['dropdown', 'select', 'selects', 'autocomplete', 'autocompletes'].includes(field.columnType)) return
+    // Autocomplete tự fetch bên trong AutocompleteField (có filter động) → không fetch ở đây nữa.
+    if (!['dropdown', 'select', 'selects'].includes(field.columnType)) return
     let cancelled = false
     setLoading(true)
     const url = resolveDependencies(field.columnObject, formData)
-    api.get(url)
-      .then((r) => { if (!cancelled) setOptions(normalizeOptions(r.data)) })
+    cachedGet(url)
+      .then((data) => { if (!cancelled) setOptions(normalizeOptions(data)) })
       .catch(() => {})
       .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
@@ -143,8 +144,8 @@ function AutocompleteField({ field, value, onChange, disabled, placeholder, form
     if (!field?.columnObject) return
     let cancelled = false
     const url = setUrlQueryParam(resolveDependencies(field.columnObject, formData), 'filter', query)
-    api.get(url)
-      .then((r) => { if (!cancelled) setOptions(normalizeOptions(r.data)) })
+    cachedGet(url)
+      .then((data) => { if (!cancelled) setOptions(normalizeOptions(data)) })
       .catch(() => {})
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps

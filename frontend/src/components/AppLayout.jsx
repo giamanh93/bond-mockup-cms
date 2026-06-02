@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
 import { ChevronLeft, ChevronRight, FileText, LogOut, Menu, Sparkles, X } from 'lucide-react'
 import { Button, Badge, Separator } from '@/components/ui'
 import { cn } from '@/lib/utils'
+import { getRuntime } from '@/lib/runtime'
 
-const NAV = [
-  { to: '/bond', label: 'Trái phiếu', icon: FileText },
-  { to: '/ui',   label: 'UI Showcase', icon: Sparkles },
+// Map tên icon từ runtime.json → component lucide. Thêm icon mới ở đây khi cần.
+const ICONS = { FileText, Sparkles }
+
+const DEFAULT_NAV = [
+  { to: '/bond', label: 'Trái phiếu', icon: 'FileText' },
+  { to: '/ui',   label: 'UI Showcase', icon: 'Sparkles' },
 ]
 
 const DAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy']
@@ -39,8 +43,13 @@ export default function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const sidebarW = collapsed ? 'w-16' : 'w-56'
-  const tag = import.meta.env.VITE_BUILD_TAG
+  const runtime = getRuntime()
+  const tag = runtime.buildTag
   const tagVariant = tag === 'API-LOCAL' ? 'success' : 'warning'
+  const NAV = useMemo(() => {
+    const items = runtime.menu?.length ? runtime.menu : DEFAULT_NAV
+    return items.map((m) => ({ ...m, icon: ICONS[m.icon] || FileText }))
+  }, [runtime.menu])
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
