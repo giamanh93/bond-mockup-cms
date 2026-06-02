@@ -1,0 +1,91 @@
+{
+  "status": "success",
+  "message": "OK",
+  "data": {
+    "tableKey": "bond_filter",
+    "groupKey": "bond_filter_group",
+    "group_fields": [
+      {
+        "group_cd": "filter",
+        "group_name": "Bộ lọc",
+        "group_column": "col-12",
+        "intOrder": 1,
+        "fields": [
+          {
+            "field_name": "bondTypeId",
+            "columnLabel": "Loại trái phiếu",
+            "columnType": "dropdown",
+            "columnValue": null,
+            "columnClass": "col-6",
+            "columnObject": "/api/v2/bondType/GetBondTypeList",
+            "data_type": "int",
+            "ordinal": 1,
+            "isRequire": 0,
+            "isSpecial": 0,
+            "isDisable": 0,
+            "isVisiable": 1,
+            "isEmpty": 1
+          },
+          {
+            "field_name": "issuerId",
+            "columnLabel": "Đơn vị phát hành",
+            "columnType": "autocomplete",
+            "columnValue": null,
+            "columnClass": "col-6",
+            "columnObject": "/api/v2/issuer/GetIssuerList?filter=",
+            "data_type": "uniqueidentifier",
+            "ordinal": 2,
+            "isRequire": 0,
+            "isSpecial": 0,
+            "isDisable": 0,
+            "isVisiable": 1,
+            "isEmpty": 1
+          },
+          {
+            "field_name": "issueDateFrom",
+            "columnLabel": "Ngày phát hành từ",
+            "columnType": "datepicker",
+            "columnValue": null,
+            "columnClass": "col-6",
+            "data_type": "datetime",
+            "ordinal": 3,
+            "isRequire": 0,
+            "isSpecial": 0,
+            "isDisable": 0,
+            "isVisiable": 1,
+            "isEmpty": 1
+          },
+          {
+            "field_name": "issueDateTo",
+            "columnLabel": "Ngày phát hành đến",
+            "columnType": "datepicker",
+            "columnValue": null,
+            "columnClass": "col-6",
+            "data_type": "datetime",
+            "ordinal": 4,
+            "isRequire": 0,
+            "isSpecial": 0,
+            "isDisable": 0,
+            "isVisiable": 1,
+            "isEmpty": 1
+          },
+          {
+            "field_name": "status",
+            "columnLabel": "Trạng thái",
+            "columnType": "dropdown",
+            "columnValue": null,
+            "columnClass": "col-12",
+            "columnObject": "/api/v2/bond/GetBondStatusList",
+            "data_type": "int",
+            "ordinal": 5,
+            "isRequire": 0,
+            "isSpecial": 0,
+            "isDisable": 0,
+            "isVisiable": 1,
+            "isEmpty": 1
+          }
+        ]
+      }
+    ]
+  }
+}

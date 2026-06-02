@@ -1,0 +1,18 @@
+{
+  "name": "bond-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bond CMS — root scripts boot mock-server + frontend song song.",
+  "scripts": {
+    "dev:mockup": "concurrently -k -n mock,fe -c yellow,cyan \"npm run dev --prefix mock-server\" \"npm run dev --prefix frontend\"",
+    "dev:api": "concurrently -k -n api,fe-api -c green,blue \"npm run dev --prefix api-server\" \"npm run dev:api --prefix frontend\"",
+    "dev:all": "concurrently -k -n mock,api,fe-mock,fe-api -c yellow,green,cyan,blue \"npm run dev --prefix mock-server\" \"npm run dev --prefix api-server\" \"npm run dev --prefix frontend\" \"npm run dev:api --prefix frontend\"",
+    "dev:mock": "npm run start --prefix mock-server",
+    "dev:fe": "npm run dev --prefix frontend",
+    "build:mockup": "npm run build --prefix frontend",
+    "build:api": "npm run build:api --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

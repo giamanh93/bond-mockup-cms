@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "data": [
+    { "value": 1, "label": "Chính phủ" },
+    { "value": 2, "label": "Doanh nghiệp" },
+    { "value": 3, "label": "Ngân hàng" },
+    { "value": 4, "label": "Trái phiếu xanh" }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "envelope.schema.json",
+  "title": "BaseResponse envelope",
+  "description": "Dual-format envelope. BE may use either lowercase (status/message/data) or PascalCase (Status/Message/Data).",
+  "type": "object",
+  "properties": {
+    "status": { "type": "string", "enum": ["success", "error"] },
+    "message": { "type": "string" },
+    "data": {},
+    "success": { "type": "boolean" },
+
+    "Status": { "oneOf": [{ "type": "integer" }, { "type": "string" }] },
+    "Message": { "type": "string" },
+    "Data": {},
+
+    "statusCode": { "type": "integer" },
+    "result": { "type": "integer" },
+    "error": {}
+  },
+  "anyOf": [
+    { "required": ["status"] },
+    { "required": ["Status"] }
+  ]
+}

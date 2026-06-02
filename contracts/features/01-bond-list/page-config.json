@@ -1,0 +1,76 @@
+{
+  "status": "success",
+  "message": "OK",
+  "data": {
+    "recordsTotal": 4,
+    "recordsFiltered": 4,
+    "gridKey": "view_bond_page",
+    "gridType": 0,
+    "valid": true,
+    "gridflexs": [
+      { "columnField": "bondCode",     "columnCaption": "Mã trái phiếu",    "columnWidth": 130, "fieldType": "text",     "isStatusLable": false, "pinned": "left",  "isHide": false, "ordinal": 1, "cellClass": "border-right,d-flex,align-items-center" },
+      { "columnField": "bondName",     "columnCaption": "Tên trái phiếu",   "columnWidth": 260, "fieldType": "text",     "isStatusLable": false, "pinned": null,    "isHide": false, "ordinal": 2, "cellClass": "border-right,d-flex,align-items-center,col-fixed" },
+      { "columnField": "issuerName",   "columnCaption": "Đơn vị phát hành", "columnWidth": 220, "fieldType": "text",     "isStatusLable": false, "pinned": null,    "isHide": false, "ordinal": 3, "cellClass": "border-right,d-flex,align-items-center,col-fixed" },
+      { "columnField": "bondTypeName", "columnCaption": "Loại",             "columnWidth": 140, "fieldType": "text",     "isStatusLable": false, "pinned": null,    "isHide": false, "ordinal": 4, "cellClass": "border-right,d-flex,align-items-center" },
+      { "columnField": "faceValue",    "columnCaption": "Mệnh giá",         "columnWidth": 140, "fieldType": "number",   "isStatusLable": false, "pinned": null,    "isHide": false, "ordinal": 5, "cellClass": "border-right,d-flex,align-items-center,justify-content-end" },
+      { "columnField": "interestRate", "columnCaption": "Lãi suất (%)",     "columnWidth": 110, "fieldType": "number",   "isStatusLable": false, "pinned": null,    "isHide": false, "ordinal": 6, "cellClass": "border-right,d-flex,align-items-center,justify-content-end" },
+      { "columnField": "issueDate",    "columnCaption": "Ngày phát hành",   "columnWidth": 130, "fieldType": "date",     "isStatusLable": false, "pinned": null,    "isHide": false, "ordinal": 7, "cellClass": "border-right,d-flex,align-items-center" },
+      { "columnField": "maturityDate", "columnCaption": "Ngày đáo hạn",     "columnWidth": 130, "fieldType": "date",     "isStatusLable": false, "pinned": null,    "isHide": false, "ordinal": 8, "cellClass": "border-right,d-flex,align-items-center" },
+      { "columnField": "statusName",   "columnCaption": "Trạng thái",       "columnWidth": 130, "fieldType": "text",     "isStatusLable": true,  "pinned": "right", "isHide": false, "ordinal": 9, "cellClass": "border-right,d-flex,align-items-center,justify-content-center", "columnObject": "[{\"label\":\"Khởi tạo\",\"badge\":\"bg-blue-500/10\",\"text\":\"text-blue-700\",\"dot\":\"bg-blue-600\"},{\"label\":\"Hoạt động\",\"badge\":\"bg-green-500/10\",\"text\":\"text-green-700\",\"dot\":\"bg-green-600\"},{\"label\":\"Đáo hạn\",\"badge\":\"bg-yellow-500/10\",\"text\":\"text-yellow-700\",\"dot\":\"bg-yellow-600\"},{\"label\":\"Hủy\",\"badge\":\"bg-red-500/10\",\"text\":\"text-red-700\",\"dot\":\"bg-red-600\"}]" }
+    ],
+    "dataList": [
+      {
+        "oid":          "b1000000-0000-0000-0000-000000000001",
+        "bondCode":     "TP24-001",
+        "bondName":     "Trái phiếu doanh nghiệp Vingroup 2024 đợt 1",
+        "issuerName":   "Tập đoàn Vingroup - CTCP",
+        "bondTypeName": "Doanh nghiệp",
+        "faceValue":    100000000,
+        "interestRate": 9.5,
+        "issueDate":    "15/03/2024",
+        "maturityDate": "15/03/2027",
+        "statusName":   "Hoạt động",
+        "status":       1
+      },
+      {
+        "oid":          "b1000000-0000-0000-0000-000000000002",
+        "bondCode":     "TP24-002",
+        "bondName":     "Trái phiếu Chính phủ kỳ hạn 10 năm",
+        "issuerName":   "Kho bạc Nhà nước",
+        "bondTypeName": "Chính phủ",
+        "faceValue":    100000,
+        "interestRate": 4.2,
+        "issueDate":    "01/06/2024",
+        "maturityDate": "01/06/2034",
+        "statusName":   "Hoạt động",
+        "status":       1
+      },
+      {
+        "oid":          "b1000000-0000-0000-0000-000000000003",
+        "bondCode":     "TP23-099",
+        "bondName":     "Trái phiếu Masan Group 2023",
+        "issuerName":   "Công ty Cổ phần Tập đoàn Masan",
+        "bondTypeName": "Doanh nghiệp",
+        "faceValue":    50000000,
+        "interestRate": 10.0,
+        "issueDate":    "20/11/2023",
+        "maturityDate": "20/11/2025",
+        "statusName":   "Đáo hạn",
+        "status":       2
+      },
+      {
+        "oid":          "b1000000-0000-0000-0000-000000000004",
+        "bondCode":     "TP25-DRAFT",
+        "bondName":     "Trái phiếu Sunshine Group 2025 (chuẩn bị)",
+        "issuerName":   "Sunshine Group",
+        "bondTypeName": "Doanh nghiệp",
+        "faceValue":    100000000,
+        "interestRate": 0,
+        "issueDate":    "01/01/2025",
+        "maturityDate": "01/01/2028",
+        "statusName":   "Khởi tạo",
+        "status":       0
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "data-page.schema.json",
+  "title": "CommonDataPage — response GET /Get<Entity>Page",
+  "description": "Response data shape for /Page endpoint. Supports both gridflexs/dataList and configs/data alias.",
+  "type": "object",
+  "required": ["recordsTotal"],
+  "properties": {
+    "recordsTotal": { "type": "integer", "minimum": 0 },
+    "recordsFiltered": { "type": "integer", "minimum": 0 },
+    "gridKey": { "type": "string" },
+    "gridType": { "type": "integer" },
+    "valid": { "type": "boolean" },
+    "sourceId": { "type": ["string", "null"] },
+
+    "gridflexs": {
+      "type": "array",
+      "items": { "$ref": "grid-column.schema.json" }
+    },
+    "dataList": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+
+    "configs": {
+      "type": "array",
+      "items": { "$ref": "grid-column.schema.json" }
+    },
+    "data": {
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  },
+  "anyOf": [
+    { "required": ["gridflexs"] },
+    { "required": ["configs"] },
+    { "required": ["dataList"] },
+    { "required": ["data"] }
+  ],
+  "additionalProperties": true
+}

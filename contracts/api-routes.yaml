@@ -1,0 +1,122 @@
+# Registry mọi endpoint giữa FE ↔ Mock ↔ BE C#
+# Quy tắc: code FE/BE chỉ được tham chiếu path có trong file này.
+
+version: 1
+
+routes:
+  # ───── Bond (Trái phiếu) ─────
+  - id: bond.list.page
+    method: GET
+    path: /api/v2/bond/GetBondPage
+    response_schema: data-page.schema.json
+    mock_file: features/01-bond-list/page-config.json
+    feature: 01-bond-list
+    owner_mockup: ai-claude
+    owner_be: null
+    status: mockup-done
+    mockup_done_at: 2026-05-30T15:00
+    be_done_at: null
+
+  - id: bond.list.filter
+    method: GET
+    path: /api/v2/bond/GetBondFilter
+    response_schema: dynamic-form-schema.schema.json
+    mock_file: features/01-bond-list/filter-config.json
+    feature: 01-bond-list
+    owner_mockup: ai-claude
+    owner_be: null
+    status: mockup-done
+    mockup_done_at: 2026-05-30T15:00
+    be_done_at: null
+
+  - id: bond.info.get
+    method: GET
+    path: /api/v2/bond/GetBondInfo
+    response_schema: dynamic-form-schema.schema.json
+    mock_file: features/01-bond-list/info-add.json
+    feature: 01-bond-list
+    owner_mockup: ai-claude
+    owner_be: null
+    status: mockup-done
+    mockup_done_at: 2026-05-30T15:00
+    be_done_at: null
+    notes: |
+      Mock-server: if request has ?Oid=<value>, prefer info-edit.json if exists; else info-add.json.
+
+  - id: bond.info.draft
+    method: POST
+    path: /api/v2/bond/SetBondInfoDraft
+    response_schema: dynamic-form-schema.schema.json
+    mock_file: null
+    feature: 01-bond-list
+    owner_mockup: ai-claude
+    owner_be: null
+    status: mockup-pending
+    notes: |
+      Mock-server: echo request body, recompute taxCode/address if changed=issuerId,
+      toggle isDisable on interestRate if changed=bondTypeId. Implemented inline in mock-server/routes/bond.js.
+
+  - id: bond.info.set
+    method: POST
+    path: /api/v2/bond/SetBondInfo
+    response_schema: null
+    mock_file: null
+    feature: 01-bond-list
+    owner_mockup: ai-claude
+    owner_be: null
+    status: mockup-pending
+    notes: |
+      Mock-server: return { status: 'success', message: 'Lưu thành công', data: { Oid: '<new-guid>' } }.
+
+  - id: bond.info.delete
+    method: POST
+    path: /api/v2/bond/DeleteBondInfo
+    response_schema: null
+    mock_file: null
+    feature: 01-bond-list
+    owner_mockup: ai-claude
+    owner_be: null
+    status: mockup-pending
+    notes: |
+      Body: { Oid: '<guid>' }. Mock echoes success; api-server soft check + DELETE FROM bond_prod_info_v2 WHERE prodId=@Oid.
+
+  # ───── Lookups (dropdown sources) ─────
+  - id: bondType.list
+    method: GET
+    path: /api/v2/bondType/GetBondTypeList
+    response_schema: null
+    mock_file: lookups/bond-type-list.json
+    feature: shared-lookups
+    owner_mockup: ai-claude
+    owner_be: null
+    status: mockup-done
+
+  - id: issuer.list
+    method: GET
+    path: /api/v2/issuer/GetIssuerList
+    response_schema: null
+    mock_file: lookups/issuer-list.json
+    feature: shared-lookups
+    owner_mockup: ai-claude
+    owner_be: null
+    status: mockup-done
+
+  - id: bond.statusList
+    method: GET
+    path: /api/v2/bond/GetBondStatusList
+    response_schema: null
+    mock_file: lookups/bond-status-list.json
+    feature: shared-lookups
+    owner_mockup: ai-claude
+    owner_be: null
+    status: mockup-done
+
+  - id: bond.couponFreqList
+    method: GET
+    path: /api/v2/bond/GetCouponFreqList
+    response_schema: null
+    mock_file: lookups/coupon-freq-list.json
+    feature: shared-lookups
+    owner_mockup: ai-claude
+    owner_be: null
+    status: mockup-done

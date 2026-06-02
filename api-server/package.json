@@ -1,0 +1,16 @@
+{
+  "name": "bond-api-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Real API server backed by SQL Server (dbKsgBond). Connection string nằm ở appsettings.json. CHỈ đụng bảng *_v2 — không động vào bảng gốc.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mssql": "^11.0.1"
+  }
+}

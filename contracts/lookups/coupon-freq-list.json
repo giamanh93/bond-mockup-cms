@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "data": [
+    { "value": 1,  "label": "Hàng tháng" },
+    { "value": 3,  "label": "3 tháng/lần" },
+    { "value": 6,  "label": "6 tháng/lần" },
+    { "value": 12, "label": "Hàng năm" }
+  ]
+}

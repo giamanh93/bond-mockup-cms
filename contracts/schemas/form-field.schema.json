@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "form-field.schema.json",
+  "title": "Field (1 item trong group_fields[].fields[])",
+  "type": "object",
+  "required": ["field_name", "columnLabel", "columnType"],
+  "properties": {
+    "field_name": { "type": "string", "description": "alias match SP _field/_draft CASE WHEN" },
+    "data_type": { "type": "string" },
+    "table_name": { "type": "string" },
+    "table_relation": { "type": "string" },
+
+    "columnLabel": { "type": "string" },
+    "columnLabelE": { "type": "string" },
+    "columnType": {
+      "type": "string",
+      "enum": [
+        "input", "textarea", "number", "richtext",
+        "dropdown", "select", "selects",
+        "autocomplete", "autocompletes",
+        "selectTree", "selectTrees",
+        "datepicker", "datetime", "datefulltime", "datetimes",
+        "checkbox", "radio",
+        "file", "files", "image",
+        "label", "hidden", "html"
+      ]
+    },
+    "columnValue": {},
+    "columnDisplay": { "type": "string" },
+    "columnTooltip": { "type": "string" },
+    "columnClass": {
+      "type": "string",
+      "enum": ["col-2", "col-3", "col-4", "col-6", "col-12"]
+    },
+    "columnDefault": {},
+    "columnObject": { "type": ["string", "null"], "description": "URL endpoint cho dropdown/autocomplete, có thể chứa placeholder {fieldName}" },
+
+    "isRequire": { "type": ["integer", "boolean"], "enum": [0, 1, true, false] },
+    "isSpecial": { "type": ["integer", "boolean"], "enum": [0, 1, true, false], "description": "true => trigger SetXxxInfoDraft khi đổi" },
+    "isDisable": { "type": ["integer", "boolean"], "enum": [0, 1, true, false] },
+    "isVisiable": { "type": ["integer", "boolean"], "enum": [0, 1, true, false] },
+    "isEmpty": { "type": ["integer", "boolean"], "enum": [0, 1, true, false] },
+    "isIgnore": { "type": ["integer", "boolean"], "enum": [0, 1, true, false] },
+
+    "ordinal": { "type": "integer" },
+    "maxLength": { "type": ["string", "integer"] }
+  },
+  "additionalProperties": true
+}

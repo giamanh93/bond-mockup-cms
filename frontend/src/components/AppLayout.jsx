@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
-import { ChevronLeft, ChevronRight, LogOut, Menu, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, FileText, LogOut, Menu, Sparkles, X } from 'lucide-react'
+import { Button, Badge, Separator } from '@/components/ui'
+import { cn } from '@/lib/utils'
 
-const NAV = []
+const NAV = [
+  { to: '/bond', label: 'Trái phiếu', icon: FileText },
+  { to: '/ui',   label: 'UI Showcase', icon: Sparkles },
+]
 
 const DAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy']
 
@@ -19,11 +24,11 @@ function LiveClock() {
   const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`
 
   return (
-    <div className="hidden md:flex items-center gap-2 text-sm text-gray-500">
-      <span className="text-gray-400">{day},</span>
-      <span className="font-medium text-gray-700">{date}</span>
-      <span className="text-gray-300">|</span>
-      <span className="font-mono font-semibold text-primary-600 tabular-nums">{time}</span>
+    <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
+      <span>{day},</span>
+      <span className="font-medium text-foreground">{date}</span>
+      <Separator orientation="vertical" className="h-4" />
+      <span className="font-mono font-semibold text-primary tabular-nums">{time}</span>
     </div>
   )
 }
@@ -34,79 +39,115 @@ export default function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const sidebarW = collapsed ? 'w-16' : 'w-56'
+  const tag = import.meta.env.VITE_BUILD_TAG
+  const tagVariant = tag === 'API-LOCAL' ? 'success' : 'warning'
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div className="flex h-screen bg-background overflow-hidden">
 
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-20 md:hidden"
+          className="fixed inset-0 bg-black/40 z-20 md:hidden backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
         />
       )}
 
       <aside
-        className={`
-          fixed md:relative z-30 flex flex-col h-full bg-white border-r border-gray-200
-          transition-all duration-200 shrink-0
-          ${sidebarW}
-          ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-        `}
+        className={cn(
+          'fixed md:relative z-30 flex flex-col h-full bg-background border-r transition-all duration-200 shrink-0',
+          sidebarW,
+          mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
+        )}
       >
-        <div className={`flex items-center h-14 border-b border-gray-100 px-3 shrink-0 ${collapsed ? 'justify-center' : 'justify-between'}`}>
+        <div className={cn('flex items-center h-14 border-b px-3 shrink-0', collapsed ? 'justify-center' : 'justify-between')}>
           {!collapsed && (
-            <span className="font-bold text-primary-600 text-base tracking-tight">Bond</span>
+            <span className="flex items-center gap-1.5">
+              <span className="font-bold text-primary text-base tracking-tight">Bond</span>
+              {tag && (
+                <Badge variant={tagVariant} className="text-[9px] uppercase tracking-wider px-1.5 py-0">
+                  {tag}
+                </Badge>
+              )}
+            </span>
           )}
-          <button
+          <Button
+            size="icon" variant="ghost"
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden md:flex items-center justify-center w-7 h-7 rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+            className="hidden md:flex h-7 w-7 text-muted-foreground"
           >
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-          </button>
-          <button
+            {collapsed ? <ChevronRight /> : <ChevronLeft />}
+          </Button>
+          <Button
+            size="icon" variant="ghost"
             onClick={() => setMobileOpen(false)}
-            className="md:hidden flex items-center justify-center w-7 h-7 rounded-md text-gray-400 hover:bg-gray-100"
+            className="md:hidden h-7 w-7 text-muted-foreground"
           >
-            <X size={16} />
-          </button>
+            <X />
+          </Button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-3 space-y-0.5 px-2">
+        <nav className="flex-1 overflow-y-auto py-3 space-y-1 px-2">
           {NAV.length === 0 && !collapsed && (
-            <p className="px-2 text-xs text-gray-400 italic">Chưa có menu</p>
+            <p className="px-2 text-xs text-muted-foreground italic">Chưa có menu</p>
           )}
+          {NAV.map(({ to, label, icon: Icon, end }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={end}
+              onClick={() => setMobileOpen(false)}
+              className={({ isActive }) =>
+                cn(
+                  'flex items-center gap-3 px-2.5 py-2 rounded-md text-sm font-medium transition-colors',
+                  isActive
+                    ? 'bg-accent text-accent-foreground'
+                    : 'text-muted-foreground hover:bg-accent/50 hover:text-foreground',
+                  collapsed ? 'justify-center' : '',
+                )
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <Icon size={16} className={cn('shrink-0', isActive ? 'text-primary' : '')} />
+                  {!collapsed && <span className="truncate">{label}</span>}
+                </>
+              )}
+            </NavLink>
+          ))}
         </nav>
 
-        <div className="shrink-0 border-t border-gray-100 p-2 space-y-1">
+        <div className="shrink-0 border-t p-2">
           {collapsed ? (
             <div className="flex flex-col items-center gap-1 py-1">
-              <div className="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-xs font-bold">
+              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">
                 {user?.fullName?.charAt(0)?.toUpperCase() ?? 'U'}
               </div>
-              <button
+              <Button
+                size="icon" variant="ghost"
                 onClick={logout}
-                className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors"
+                className="h-8 w-8 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                 title="Đăng xuất"
               >
-                <LogOut size={15} />
-              </button>
+                <LogOut />
+              </Button>
             </div>
           ) : (
-            <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg bg-gray-50">
-              <div className="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-sm font-bold shrink-0">
+            <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-md bg-muted/50">
+              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-bold shrink-0">
                 {user?.fullName?.charAt(0)?.toUpperCase() ?? 'U'}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-gray-800 truncate">{user?.fullName}</p>
-                <p className="text-xs text-gray-400 truncate capitalize">{user?.role}</p>
+                <p className="text-xs font-semibold truncate">{user?.fullName}</p>
+                <p className="text-xs text-muted-foreground truncate capitalize">{user?.role}</p>
               </div>
-              <button
+              <Button
+                size="icon" variant="ghost"
                 onClick={logout}
-                className="flex items-center justify-center w-7 h-7 rounded-lg text-gray-400 hover:bg-red-50 hover:text-red-500 transition-colors shrink-0"
+                className="h-7 w-7 text-muted-foreground hover:bg-destructive/10 hover:text-destructive shrink-0"
                 title="Đăng xuất"
               >
-                <LogOut size={15} />
-              </button>
+                <LogOut className="h-3.5 w-3.5" />
+              </Button>
             </div>
           )}
         </div>
@@ -114,22 +155,27 @@ export default function AppLayout() {
 
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
 
-        <header className="flex items-center h-14 px-4 bg-white border-b border-gray-200 shrink-0 md:px-6">
-          <button
+        <header className="flex items-center h-14 px-4 bg-background border-b shrink-0 md:px-6">
+          <Button
+            size="icon" variant="ghost"
             onClick={() => setMobileOpen(true)}
-            className="mr-3 md:hidden text-gray-500 hover:text-gray-700"
+            className="mr-2 md:hidden h-8 w-8"
           >
-            <Menu size={20} />
-          </button>
-          <span className="font-bold text-primary-600 text-base md:hidden">Bond</span>
+            <Menu />
+          </Button>
+          <span className="font-bold text-primary text-base md:hidden">Bond</span>
           <LiveClock />
           <div className="flex-1" />
-          <button onClick={logout} className="md:hidden text-gray-400 hover:text-red-500 ml-2">
-            <LogOut size={18} />
-          </button>
+          <Button
+            size="icon" variant="ghost"
+            onClick={logout}
+            className="md:hidden text-muted-foreground hover:text-destructive ml-2"
+          >
+            <LogOut />
+          </Button>
         </header>
 
-        <main className="flex-1 min-h-0 overflow-y-auto">
+        <main className="flex-1 min-h-0 overflow-y-auto bg-muted/20">
           <div className="h-full p-4 md:p-6">
             <Outlet />
           </div>

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dynamic-form-schema.schema.json",
+  "title": "DynamicFormSchema — response GET /Get<Entity>Info, GET /Get<Entity>Filter, POST /Set<Entity>InfoDraft",
+  "type": "object",
+  "required": ["tableKey", "groupKey", "group_fields"],
+  "properties": {
+    "Oid": { "type": ["string", "null"], "description": "GUID hoặc null khi thêm mới" },
+    "Id": { "type": ["integer", "null"] },
+    "tableKey": { "type": "string" },
+    "groupKey": { "type": "string" },
+    "draftPath": { "type": ["string", "null"] },
+    "submitPath": { "type": ["string", "null"] },
+    "group_fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["group_cd", "fields"],
+        "properties": {
+          "group_cd": { "type": "string" },
+          "group_name": { "type": "string" },
+          "group_key": { "type": "string" },
+          "group_table": { "type": "string" },
+          "group_column": { "type": "string" },
+          "isGridEditor": { "type": "boolean" },
+          "expand": { "type": "boolean" },
+          "intOrder": { "type": "integer" },
+          "fields": {
+            "type": "array",
+            "items": { "$ref": "form-field.schema.json" }
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

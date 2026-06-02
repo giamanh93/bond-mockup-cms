@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "data": [
+    { "value": "i1000000-0000-0000-0000-000000000001", "label": "Tập đoàn Vingroup - CTCP",       "taxCode": "0101245486", "address": "Số 7, Đường Bằng Lăng 1, KĐT Vinhomes Riverside, Long Biên, Hà Nội" },
+    { "value": "i1000000-0000-0000-0000-000000000002", "label": "Kho bạc Nhà nước",                "taxCode": "0100123456", "address": "32 Cát Linh, Đống Đa, Hà Nội" },
+    { "value": "i1000000-0000-0000-0000-000000000003", "label": "Công ty Cổ phần Tập đoàn Masan", "taxCode": "0303576368", "address": "12 Nguyễn Huệ, Quận 1, TP. HCM" },
+    { "value": "i1000000-0000-0000-0000-000000000004", "label": "Sunshine Group",                 "taxCode": "0107483712", "address": "Tầng 32 Sunshine Center, 16 Phạm Hùng, Nam Từ Liêm, Hà Nội" }
+  ]
+}

@@ -5,6 +5,8 @@ import Login from '@/pages/Login'
 import AuthCallback from '@/pages/AuthCallback'
 import AppLayout from '@/components/AppLayout'
 import Home from '@/pages/Home'
+import BondList from '@/pages/BondList'
+import UIShowcase from '@/pages/UIShowcase'
 
 function PrivateRoute({ children }) {
   const { user, isLoading } = useAuthStore()
@@ -31,6 +33,8 @@ export default function App() {
         }
       >
         <Route index element={<Home />} />
+        <Route path="bond" element={<BondList />} />
+        <Route path="ui" element={<UIShowcase />} />
       </Route>
     </Routes>
   )

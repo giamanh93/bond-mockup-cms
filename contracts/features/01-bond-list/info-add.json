@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "message": "OK",
+  "data": {
+    "Oid": null,
+    "tableKey": "bond_info",
+    "groupKey": "bond_info_group",
+    "draftPath": "/api/v2/bond/SetBondInfoDraft",
+    "submitPath": "/api/v2/bond/SetBondInfo",
+    "group_fields": [
+      {
+        "group_cd": "info",
+        "group_name": "Thông tin chung",
+        "group_column": "col-12",
+        "intOrder": 1,
+        "fields": [
+          { "field_name": "bondCode",   "columnLabel": "Mã trái phiếu",     "columnType": "input",        "columnValue": "",   "columnClass": "col-3", "data_type": "string",           "ordinal": 1, "isRequire": 1, "isSpecial": 0, "isDisable": 0, "isVisiable": 1, "isEmpty": 0, "maxLength": "30" },
+          { "field_name": "bondName",   "columnLabel": "Tên trái phiếu",    "columnType": "input",        "columnValue": "",   "columnClass": "col-6", "data_type": "string",           "ordinal": 2, "isRequire": 1, "isSpecial": 0, "isDisable": 0, "isVisiable": 1, "isEmpty": 0, "maxLength": "255" },
+          { "field_name": "bondTypeId", "columnLabel": "Loại trái phiếu",   "columnType": "dropdown",     "columnValue": null, "columnClass": "col-3", "data_type": "int",              "ordinal": 3, "isRequire": 1, "isSpecial": 1, "isDisable": 0, "isVisiable": 1, "isEmpty": 0, "columnObject": "/api/v2/bondType/GetBondTypeList" },
+          { "field_name": "issuerId",   "columnLabel": "Đơn vị phát hành",  "columnType": "autocomplete", "columnValue": null, "columnClass": "col-6", "data_type": "uniqueidentifier", "ordinal": 4, "isRequire": 1, "isSpecial": 1, "isDisable": 0, "isVisiable": 1, "isEmpty": 0, "columnObject": "/api/v2/issuer/GetIssuerList?filter=" },
+          { "field_name": "taxCode",    "columnLabel": "Mã số thuế",        "columnType": "input",        "columnValue": "",   "columnClass": "col-3", "data_type": "string",           "ordinal": 5, "isRequire": 0, "isSpecial": 0, "isDisable": 1, "isVisiable": 1, "isEmpty": 1, "maxLength": "20" },
+          { "field_name": "address",    "columnLabel": "Địa chỉ",           "columnType": "input",        "columnValue": "",   "columnClass": "col-12", "data_type": "string",          "ordinal": 6, "isRequire": 0, "isSpecial": 0, "isDisable": 1, "isVisiable": 1, "isEmpty": 1, "maxLength": "500" }
+        ]
+      },
+      {
+        "group_cd": "financial",
+        "group_name": "Tài chính",
+        "group_column": "col-12",
+        "intOrder": 2,
+        "fields": [
+          { "field_name": "faceValue",    "columnLabel": "Mệnh giá",       "columnType": "number",     "columnValue": null, "columnClass": "col-3", "data_type": "decimal",  "ordinal": 1, "isRequire": 1, "isSpecial": 0, "isDisable": 0, "isVisiable": 1, "isEmpty": 0 },
+          { "field_name": "interestRate", "columnLabel": "Lãi suất (%)",   "columnType": "number",     "columnValue": null, "columnClass": "col-3", "data_type": "decimal",  "ordinal": 2, "isRequire": 1, "isSpecial": 0, "isDisable": 0, "isVisiable": 1, "isEmpty": 0 },
+          { "field_name": "couponFreq",   "columnLabel": "Kỳ trả lãi",     "columnType": "dropdown",   "columnValue": null, "columnClass": "col-3", "data_type": "int",      "ordinal": 3, "isRequire": 1, "isSpecial": 0, "isDisable": 0, "isVisiable": 1, "isEmpty": 0, "columnObject": "/api/v2/bond/GetCouponFreqList" },
+          { "field_name": "issueDate",    "columnLabel": "Ngày phát hành", "columnType": "datepicker", "columnValue": null, "columnClass": "col-3", "data_type": "datetime", "ordinal": 4, "isRequire": 1, "isSpecial": 0, "isDisable": 0, "isVisiable": 1, "isEmpty": 0 },
+          { "field_name": "maturityDate", "columnLabel": "Ngày đáo hạn",   "columnType": "datepicker", "columnValue": null, "columnClass": "col-3", "data_type": "datetime", "ordinal": 5, "isRequire": 1, "isSpecial": 0, "isDisable": 0, "isVisiable": 1, "isEmpty": 0 },
+          { "field_name": "status",       "columnLabel": "Trạng thái",     "columnType": "dropdown",   "columnValue": 0,    "columnClass": "col-3", "data_type": "int",      "ordinal": 6, "isRequire": 1, "isSpecial": 0, "isDisable": 0, "isVisiable": 1, "isEmpty": 0, "columnObject": "/api/v2/bond/GetBondStatusList" }
+        ]
+      }
+    ]
+  }
+}

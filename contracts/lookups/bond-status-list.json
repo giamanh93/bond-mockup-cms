@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "data": [
+    { "value": 0, "label": "Khởi tạo" },
+    { "value": 1, "label": "Hoạt động" },
+    { "value": 2, "label": "Đáo hạn" },
+    { "value": 3, "label": "Hủy" }
+  ]
+}
